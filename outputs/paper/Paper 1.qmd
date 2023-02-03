@@ -14,7 +14,7 @@ theme: cosmo
 bibliography: bibliography.bib
 ---
 
-^[Code and data supporting this analysis is available at: LINK]
+^[Code and data supporting this analysis is available at: https://github.com/SofiaSellitto/Toronto-Victimization-Rates]
 
 ## 1 Introduction
 
@@ -127,7 +127,7 @@ My investigation began with an overview of the average number of people victimiz
 
 knitr::kable(mean_data,
              "simple", 
-             caption = "Average number of victims of crimes in Toronto across 2014                         -2021, grouped by category of crime", 
+             caption = "Average number of victims of crimes in Toronto across 2014-2021, grouped by category of crime", 
              col.names=c("Category of Crime", "Average Number of Victims"), 
              align=c('l', 'c'))
 
@@ -145,7 +145,7 @@ From there, I began preparing the data frame I would need to visualize how the n
 
 knitr::kable(head(cleaned_data_dropped_grouped), 
              "simple", 
-             caption = "The first 6 rows of the data frame used to represent the                          number of victims according to category of crime in Toronto Across 2014 - 2021",
+             caption = "The first 6 rows of the data frame used to represent the number of victims according to category of crime in Toronto Across 2014 - 2021",
              col.names=c("Sub-Category of Crime", "Year", "Number of Victims"), 
              align=c('l', 'c', 'c'))
 
@@ -160,8 +160,8 @@ Similarly, to create the data frame that I would use to visualize how sex impact
 
 knitr::kable(head(sex_data), 
              "simple", 
-             caption = "The first 6 rows of the data frame used to represent the                           sex of the number of victims according to category of crime in Toronto Across 2014 - 2021", col.names=c("Sub-Category of Crime", "Sex", "Year", "Number of Victims"), 
-             align=c('l', 'c', 'c'))
+             caption = "The first 6 rows of the data frame used to represent thesex of the number of victims according to category of crime in Toronto Across 2014 - 2021", col.names=c("Sub-Category of Crime", "Sex", "Year", "Number of Victims"), 
+             align=c('l', 'c', 'c', 'c'))
 
 
          

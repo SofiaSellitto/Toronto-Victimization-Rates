@@ -1,4 +1,7 @@
 
+## Importing and loading raw data from The City of Toronto ##
+
+
 library(opendatatoronto)
 library(dplyr)
 
