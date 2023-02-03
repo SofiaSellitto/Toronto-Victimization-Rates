@@ -1,0 +1,171 @@
+---
+title: "Assessing the Rates of Crimes Against the Person in Toronto "
+author: Sofia Sellitto
+date: February 3, 2023
+date-format: long
+abstract: Abstract 
+format: pdf
+bibliography: bibliography.bib
+---
+
+# 
+
+This data was free for use, courtesy of @opendatatoronto. We are using @R for analyzing this data.
+
+## Loading Packages and Data
+
+We import tidyverse by @tidyverse for convenience because it contains many other packages which will be useful for plotting and data manipulations. We also use @janitor for cleaning and @dplyr for manipulating data.
+
+```{r}
+## loading appropriate packages
+
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(janitor)
+library(dplyr)
+
+```
+
+
+
+```{r}
+## Calling on cleaned data 
+cleaned_data_dropped <- read_csv(here::here("inputs/data/cleaned_data.csv"))
+head(cleaned_data_dropped)
+```
+
+
+
+
+```{r}
+
+## summing count of crimes and making them its own group
+
+cleaned_data_dropped_grouped <- cleaned_data_dropped |>
+  group_by(subtype, reported_year) |>
+  summarise(across(count, sum))
+
+cleaned_data_dropped_grouped
+```
+
+
+```{r}
+### making a data frame that includes the variable sex so that I can call on it for a graph
+
+sex_data <- cleaned_data_dropped |>
+  group_by(subtype,sex, reported_year) |>
+  summarise(across(count, sum))
+
+sex_data
+
+```
+
+
+```{r}
+
+## calculating the mean number of crimes for each subcategory across 2014-2021
+
+mean_data <- cleaned_data_dropped_grouped |>
+    summarise(mean_count = mean(count))
+
+
+mean_data
+
+```
+
+```{r}
+
+## Creating a table to visually to display the mean number of crimes for each subcategory across 2014-2021
+
+knitr::kable(mean_data,"simple", caption = "Average Number of victims of crimes in Toronto across 2014-2021, grouped by category of crime", 
+             col.names=c("Category of Crime", "Average Number of Victims"), 
+             align=c('l', 'c'))
+
+
+```
+
+
+
+
+
+
+```{r}
+
+
+knitr::kable(head(cleaned_data_dropped_grouped), "simple", caption = "The first 6 rows of the data frame used to represent the number of victims according to category of crime in Toronto Across 2014 - 2021",
+             col.names=c("Sub-Category of Crime", "Year", "Number of Victims"), 
+             align=c('l', 'c', 'c'))
+
+
+```
+
+```{r}
+
+knitr::kable(head(sex_data), "simple", caption = "The first 6 rows of the data frame used to represent the gender of the number of victims according to category of crime in Toronto Across 2014 - 2021", col.names=c("Sub-Category of Crime", "Sex", "Year", "Number of Victims"), 
+             align=c('l', 'c', 'c'))
+
+
+         
+
+             
+```
+
+See @figure1
+
+```{r}
+## creating a line graph that includes the number of victims according to category of crime in Toronto across 2014-2021
+
+#| fig-cap: "Number of victims according to category of crime in Toronto Across 2014 - 2021"
+#| label: figure1
+
+cleaned_data_dropped_grouped |>
+  ggplot(aes(x = reported_year, y = count, colour = subtype))+
+  geom_point(linewidth = 5, alpha = 0.3)+
+  geom_line(linewidth = 1)+
+  theme_minimal()+
+  labs(
+    title = "Victims of Crime in Toronto Across 2014 - 2021",
+    x = "Year",  
+    y = "Number of Victims", 
+    colour = "Category of Crime" )
+  
+
+
+```
+
+
+
+
+
+See @figure2
+
+```{r}
+
+## calling on my data frame to create a bar plot of the sex of the victims across time 
+
+#| fig-cap: "How the victims of crimes varries across sex in Toronto from 2014-2021"
+#| label: figure2
+
+ggplot(sex_data, aes
+       (x =reported_year, 
+        y =count, 
+        fill =sex))+
+            geom_bar(position="dodge", stat="identity")+
+            facet_wrap(~subtype)+
+            scale_fill_manual(values=c("#C0AFE2", "#ADD8E6"))+
+            theme_minimal()+
+            labs(
+            title = "Victims of Crime in Toronto Categorized by Sex Across 2014 - 2021",
+            x = "Year",  
+            y = "Number of Victims",
+            legend = "Sex")
+           
+
+
+
+```
+
+
+
+## References
